@@ -40,9 +40,6 @@ set ignorecase
 " E162: No write since last change for buffer “a.txt”
 set hidden
 
-" Disable folding because it is evil
-set nofoldenable
-
 " Turn word wrap off
 set nowrap
 
