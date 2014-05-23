@@ -1,20 +1,6 @@
-# Some of the Zsh awesomeness seen below was originally found here...
-# http://zanshin.net/2013/02/02/zsh-configuration-from-the-ground-up/
-
-# Variables {{{
-dropbox="$HOME/Dropbox"
-syncfolder="$HOME/Box Sync" # sourcing a file breaks with backslashes
-# }}}
-
 # Exports {{{
-export GITHUB_USER="integralist"
-export DROPBOX=$dropbox # Export the path so it can be used elsewhere (such as in our .vimrc file)
-export DEV_CERT_PATH="$syncfolder/Work/BBC/Certificates"
-export DEV_CERT_PEM="$DEV_CERT_PATH/Certificate.pem"
-export DEV_CERT_P12="$DEV_CERT_PATH/Certificate.p12"
+export GITHUB_USER="your-username"
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin # Reorder PATH so local bin is first
-export PATH="/usr/local/share/npm/bin:$PATH" # Fixes issue where updating NPM causes wrong bin path to be picked up
-export NETWORK_LOCATION="$(/usr/sbin/scselect 2>&1 | egrep '^ \* ' | sed 's:.*(\(.*\)):\1:')"
 export GREP_OPTIONS='--color=auto'
 export GREP_COLOR='1;32'
 export MANPAGER="less -X" # Don’t clear the screen after quitting a manual page
@@ -23,121 +9,6 @@ export TERM="screen-256color"
 export CLICOLOR=1
 export LSCOLORS=Gxfxcxdxbxegedabagacad
 export LS_COLORS=Gxfxcxdxbxegedabagacad
-# }}}
-
-# Network {{{
-if [ $NETWORK_LOCATION = 'BBC On Network'  ]; then
-    export http_proxy='http://www-cache.reith.bbc.co.uk:80'
-    export https_proxy='http://www-cache.reith.bbc.co.uk:80'
-    export ftp_proxy='ftp-gw.reith.bbc.co.uk:21'
-    export socks_proxy='socks-gw.reith.bbc.co.uk:1085'
-
-    export HTTP_PROXY='http://www-cache.reith.bbc.co.uk:80'
-    export HTTPS_PROXY='http://www-cache.reith.bbc.co.uk:80'
-    export FTP_PROXY='ftp-gw.reith.bbc.co.uk:21'
-    export SOCKS_PROXY='socks-gw.reith.bbc.co.uk:1085'
-else
-    unset http_proxy
-    unset https_proxy
-    unset ftp_proxy
-    unset socks_proxy
-
-    unset HTTP_PROXY
-    unset HTTPS_PROXY
-    unset FTP_PROXY
-    unset SOCKS_PROXY
-fi;
-# }}}
-
-# Ruby {{{
-# Determine Ruby version
-function get_ruby_version() {
-  ruby -v | awk '{print $1 " " $2}'
-}
-
-# Sets up chruby and allows us to use .ruby-version files to switch ruby versions
-source /usr/local/opt/chruby/share/chruby/chruby.sh
-source /usr/local/opt/chruby/share/chruby/auto.sh
-
-# Makes installing versions of Ruby slightly easier
-function ri() {
-  ruby-install -i ~/.rubies/ ruby $1
-}
-
-# Handle installing of Ruby Gems using Gemsets
-# Create a `.gemset` file alongside your Gemfile
-# The content of `.gemset` is your project name.
-# Will install Gems to `~/.gem/gemsets/ruby/{version}/{identifier}/gems`
-function chruby_gemset() {
-  # Save existing environment setup
-  if [ -z "$DEFAULT_GEM_HOME" ]; then
-    export DEFAULT_GEM_HOME=$GEM_HOME
-  fi
-
-  if [ -z "$DEFAULT_GEM_PATH" ]; then
-    export DEFAULT_GEM_PATH=$GEM_PATH
-  fi
-
-  if [ -z "$DEFAULT_PATH" ]; then
-    export DEFAULT_PATH=$PATH
-  fi
-  chruby_gemset=$1
-
-  ruby_bin="`command -v unbundled_ruby || command -v ruby`"
-
-eval `$ruby_bin - <<EOF
-require 'rubygems'
-puts "ruby_engine=#{defined?(RUBY_ENGINE) ? RUBY_ENGINE : 'ruby'}"
-puts "ruby_vers=#{RUBY_VERSION}"
-puts "gem_path=\"#{Gem.path.join(':')}\""
-EOF`
-
-  gem_dir="$HOME/.gem/gemsets/$ruby_engine/$ruby_vers/$chruby_gemset"
-
-  export PATH="$gem_dir/bin:$PATH"
-  export GEM_HOME="$gem_dir"
-  export GEM_PATH="$gem_dir"
-}
-
-function reset_chruby_gemset() {
-  export PATH=$DEFAULT_PATH
-  export GEM_HOME=$DEFAULT_GEM_HOME
-  export GEM_PATH=$DEFAULT_GEM_PATH
-}
-
-function chruby_gemset_auto() {
-  local dir="$PWD"
-  local gemset
-
-  until [[ -z "$dir" ]]; do
-    if { read -r gemset <"$dir/.gemset"; } 2>/dev/null; then
-      chruby_gemset "$gemset"
-      return $?
-    fi
-    if { read -r gemset <"$dir/.ruby-gemset"; } 2>/dev/null; then
-      chruby_gemset "$gemset"
-      return $?
-    fi
-
-    dir="${dir%/*}"
-  done
-
-  if [[ -z "$gemset" ]]; then
-    if [ -z "$DEFAULT_GEM_PATH" ]; then
-    else
-      reset_chruby_gemset
-      unset DEFAULT_GEM_PATH
-      unset DEFAULT_GEM_HOME
-      unset DEFAULT_PATH
-    fi
-  fi
-}
-
-if [[ -n "$ZSH_VERSION" ]]; then
-  if [[ ! "$preexec_functions" == *chruby_gemset_auto* ]]; then
-    preexec_functions+=("chruby_gemset_auto")
-  fi
-fi
 # }}}
 
 # Tmux {{{
@@ -158,165 +29,12 @@ function tmuxkill() {
 # }}}
 
 # Alias' {{{
+alias vi="vim"
 alias r="source ~/.zshrc"
 alias tmuxsrc="tmux source-file ~/.tmux.conf"
-alias vi="vim"
-alias st="cd tabloid/webapp/static"
-alias rubyv="ls ~/.rubies/"
-alias grunt="grunt --verbose --stack"
 alias tmuxkillall="tmux ls | cut -d : -f 1 | xargs -I {} tmux kill-session -t {}" # tmux kill all sessions
-alias lib="cd '$syncfolder/Library'"
-alias shell="cd $dropbox/Fresh\ Install/Shell"
-alias site="cd '$syncfolder/Library/Github/integralist/Website'"
-alias vs="vagrant suspend"
-alias vu="vagrant up"
-alias vd="vagrant destroy"
-alias vr="vagrant box remove responsive virtualbox"
-alias vst="vagrant status"
-alias vsh="vagrant ssh"
-alias gemu="for i in `gem list --no-versions`; do gem uninstall -aIx $i; done"
-alias phplint='find ./ -name \*.php | xargs -n 1 php -l'
-alias currentwifi='networksetup -getairportnetwork en0'
-alias ip='dig +short myip.opendns.com @resolver1.opendns.com'
-alias localip='ipconfig getifaddr en0'
-alias ips="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print $1'" # command works, but not when aliased?
 alias ct="ctags -R --exclude=.git --exclude=node_modules"
-alias phpsh="psysh"
 alias dotfiles="ls -a | grep '^\.' | grep --invert-match '\.DS_Store\|\.$'"
-alias cukes="ulimit -n 1024; cucumber"
-# }}}
-
-# Website Deployment {{{
-# Using CabinJS to create my blog, but it only works with GitHub pages
-# So rather than write a Rake task or a Node/Grunt task and have to remember the File system APIs
-# I've decided to use standard unix commands to achieve the same thing.
-# Yes it's a lot more long winded but it works and took me a lot less time to write.
-#
-# we move into our website directory
-# we create a log.txt file
-# we send to stdout the latest commit message
-# we cut out just the message (ignoring the commit hash)
-# we pipe the stdout to xargs where we then write it into the log.txt
-# we move into our website release folder
-# we copy the content of the `dist` folder into our website release folder
-# we `git add` and `git add -A`
-# we send to stdout the content of our log.txt (which is the commit message)
-# we then pipe that commit message over to xargs which runs `git commit` using it
-# finally we `git push origin master`
-alias deploysite="cd '$syncfolder/Library/Github/integralist/Website' && \
-                  touch log.txt && \
-                  git log --oneline -n 1 | \
-                  cut -d ' ' -f 2- | \
-                  xargs -I {} echo {} > log.txt && \
-                  cd ../integralist.github.com && \
-                  cp -r ../Website/dist/* ./ && \
-                  git add . && git add -A && \
-                  cat ../Website/log.txt | \
-                  xargs -I {} git commit -m {} && \
-                  git push origin master"
-# }}}
-
-# Miscellaneous {{{
-function set_ruby() {
-  touch .ruby-version && echo $1 >> .ruby-version
-}
-
-function gem_add_owner() {
-  # gem help owner
-  gem owner $1 -a $2
-}
-
-function restart_finder() {
-  killall Finder
-}
-
-function show_hidden_files() {
-  defaults write com.apple.finder AppleShowAllFiles TRUE
-  restart_finder
-}
-
-function hide_hidden_files() {
-  defaults write com.apple.finder AppleShowAllFiles FALSE
-  restart_finder
-}
-
-# find shorthand
-# find ./ -name '*.js'
-function f() {
-  find . -name "$1"
-}
-
-# Create a new directory and enter it
-function md() {
-  mkdir -p "$@" && cd "$@"
-}
-
-# Start an HTTP server from a directory, optionally specifying the port
-function server() {
-  local port="${1:-8000}"
-  open "http://localhost:${port}/"
-  # Set the default Content-Type to `text/plain` instead of `application/octet-stream`
-  # And serve everything as UTF-8 (although not technically correct, this doesn’t break anything for binary files)
-  python -c $'import SimpleHTTPServer;\nmap = SimpleHTTPServer.SimpleHTTPRequestHandler.extensions_map;\nmap[""] = "text/plain";\nfor key, value in map.items():\n\tmap[key] = value + ";charset=UTF-8";\nSimpleHTTPServer.test();' "$port"
-}
-
-function phpserver() {
-  php -S localhost:8888
-}
-
-function rubyserver() {
-  ruby -run -e httpd . -p 5000
-}
-
-# get gzipped size
-function gz() {
-  echo "orig size    (bytes): "
-  cat "$1" | wc -c
-  echo "gzipped size (bytes): "
-  gzip -c "$1" | wc -c
-}
-
-# Vagrant fixes issue with Chef not completing
-if `test -t 0`; then
-   mesg n
-fi
-
-# Open path in the terminal which matches current directory within the the forefront Finder window.
-function cdf() {
-  if [ "`osascript -e 'tell application "System Events" to "Finder" is in (get name of processes)'`" = "true" ]; then
-    if [ "`osascript -e 'tell application "Finder" to get collapsed of front window' 2>/dev/null`" != "false" ]; then
-      if [ "`osascript -e 'tell application "System Events" to "TotalFinderCrashWatcher" is in (get name of processes)'`" = "true" ];then
-        open .
-        osascript -e 'tell application "System Events" to tell process "Finder" to keystroke "w" using {command down}' -e 'tell application "System Events" to tell process "Finder" to keystroke "h" using {command down}'
-      else
-        finderState=`osascript -e 'tell application "System Events" to set visible of application process "Finder" to true' -e 'tell application "Finder" to set collapsed of front window to true' 2>/dev/null`
-      fi
-    fi
-
-    finder=`osascript -e 'tell application "Finder" to set curName to (POSIX path of (target of front window as alias))' 2>/dev/null`
-
-    if [ -z "$finder" ]; then
-      echo "Failed to find \"Finder\""
-    else
-      echo "$finder"
-      cd "$finder"
-    fi
-
-  else
-    echo "\"Finder\" is not running"
-  fi
-}
-
-# Convert movie file to animated gif
-gif-ify() {
-  if [[ -n "$1" && -n "$2" ]]; then
-    ffmpeg -i $1 -pix_fmt rgb24 temp.gif
-    convert -layers Optimize temp.gif $2
-    rm temp.gif
-  else
-    echo "proper usage: gif-ify <input_movie.mov> <output_file.gif>. You DO need to include extensions."
-  fi
-}
 # }}}
 
 # Auto Completion {{{
@@ -346,11 +64,7 @@ zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-
 
 # list of completers to use
 zstyle ':completion:*::::' completer _expand _complete _ignored _approximate
-
 zstyle ':completion:*' menu select=1 _complete _ignored _approximate
-
-# insert all expansions for expand completer
-# zstyle ':completion:*:expand:*' tag-order all-expansions
 
 # match uppercase from lowercase
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
@@ -548,16 +262,6 @@ $(prompt_char) '
 
 export SPROMPT="Correct $fg[red]%R$reset_color to $fg[green]%r$reset_color [(y)es (n)o (a)bort (e)dit]? "
 
-# directory="$PWD"
-# version=
-
-# until [[ -z "$directory" ]]; do
-#     echo "hai: " $directory
-#     if { read -r version <"$directory/.ruby-version"; } 2>/dev/null || [[ -n "$version" ]]; then
-#       echo "hai"
-#     fi
-# done
-
 RPROMPT='${PR_GREEN}$(virtualenv_info)%{$reset_color%} ${PR_RED}$(get_ruby_version)%{$reset_color%}'
 # }}}
 
@@ -588,9 +292,4 @@ function preexec {
 function postexec {
   set_running_app
 }
-# }}}
-
-# Zsh Sourced {{{
-# brew install zsh-syntax-highlighting
-source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # }}}
