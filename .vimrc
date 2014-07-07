@@ -100,16 +100,10 @@ set visualbell
 " Set built-in file system explorer to use layout similar to the NERDTree plugin
 let g:netrw_liststyle=3
 
-" Set highlight to be a specific colour
-hi CursorLine   cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
-hi CursorColumn cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
-
-" Only apply line highlighting within the current buffer
-augroup CursorLine
-  au!
-  au VimEnter,WinEnter,BufWinEnter * setlocal cursorline
-  au WinLeave * setlocal nocursorline
-augroup END
+" Always highlight column 80 so it's easier to see where
+" cutoff appears on longer screens
+autocmd BufWinEnter * highlight ColorColumn ctermbg=darkred
+set colorcolumn=80
 " }}}
 
 " Plugins {{{
