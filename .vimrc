@@ -266,8 +266,8 @@ autocmd Filetype markdown setlocal wrap linebreak nolist textwidth=0 wrapmargin=
 autocmd FileType sh,cucumber,ruby,yaml,zsh,vim setl sw=2 sts=2 et
 
 " specify syntax highlighting for specific files
-au Bufread,BufNewFile *.spv set filetype=php
-au Bufread,BufNewFile *.md set filetype=markdown " Vim interprets .md as 'modula2' otherwise, see :set filetype?
+autocmd Bufread,BufNewFile *.spv set filetype=php
+autocmd Bufread,BufNewFile *.md set filetype=markdown " Vim interprets .md as 'modula2' otherwise, see :set filetype?
 
 " Highlight words to avoid in tech writing
 " http://css-tricks.com/words-avoid-educational-writing/
