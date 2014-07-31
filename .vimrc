@@ -23,10 +23,10 @@ set ruler
 " Show incomplete commands
 set showcmd
 
-" Incremental searching
+" Incremental searching (search as you type)
 set incsearch
 
-" Highlight search
+" Highlight search matches
 set hlsearch
 
 " Ignore case in search
@@ -49,7 +49,7 @@ set backspace=indent,eol,start
 " Convert tabs to spaces
 set expandtab
 
-" Set tab size
+" Set tab size in spaces
 set tabstop=4
 
 " The number of spaces inserted for a tab
@@ -97,6 +97,15 @@ set cursorline
 " Ensure Vim doesn't beep at you every time you make a mistype
 set visualbell
 
+" Visual autocomplete for command menu (e.g. :e ~/path/to/file)
+set wildmenu
+
+" redraw only when we need to (i.e. don't redraw when executing a macro)
+set lazyredraw
+
+" highlight a matching [{()}] when cursor is placed on start/end character
+set showmatch
+
 " Set built-in file system explorer to use layout similar to the NERDTree plugin
 let g:netrw_liststyle=3
 
@@ -120,9 +129,18 @@ map <leader>y :CtrlPBuffer<cr>
 let g:ctrlp_show_hidden=1
 let g:ctrlp_working_path_mode=0
 let g:ctrlp_max_height=30
+
+" CtrlP -> override <C-o> to provide options for how to open files
+let g:ctrlp_arg_map = 1
+
+" CtrlP -> files matched are ignored when expanding wildcards
 set wildignore+=*/.git/*,*/.hg/*,*/.svn/*.,*/.DS_Store
 
-" Directories to ignore when fuzzy finding with CtrlP
+" CtrlP -> use Ag for searching instead of VimScript
+" (might not work with ctrlp_show_hidden and ctrlp_custom_ignore)
+let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+
+" CtrlP -> directories to ignore when fuzzy finding
 let g:ctrlp_custom_ignore = '\v[\/]((node_modules)|\.(git|svn|grunt|sass-cache))$'
 
 " Ack (uses Ag behind the scenes)
