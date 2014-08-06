@@ -206,12 +206,6 @@ sunmap e
 " Command to use sudo when needed
 cmap w!! %!sudo tee > /dev/null %
 
-" No longer needs ctrl+w + direction
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
-
 " File System Explorer (in horizontal split)
 map <leader>. :Sexplore<cr>
 
