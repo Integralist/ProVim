@@ -275,7 +275,7 @@ autocmd BufWritePre * call StripTrailingWhitespace()
 " file formats
 autocmd Filetype gitcommit setlocal spell textwidth=72
 autocmd Filetype markdown setlocal wrap linebreak nolist textwidth=0 wrapmargin=0 " http://vim.wikia.com/wiki/Word_wrap_without_line_breaks
-autocmd FileType sh,cucumber,ruby,yaml,zsh,vim setl sw=2 sts=2 et
+autocmd FileType sh,cucumber,ruby,yaml,zsh,vim setlocal shiftwidth=2 tabstop=2 expandtab
 
 " specify syntax highlighting for specific files
 autocmd Bufread,BufNewFile *.spv set filetype=php
@@ -318,9 +318,9 @@ autocmd BufRead * normal zM
 
 " Rainbow parenthesis always on!
 if exists(':RainbowParenthesesToggle')
-  au VimEnter * RainbowParenthesesToggle
-  au Syntax * RainbowParenthesesLoadRound
-  au Syntax * RainbowParenthesesLoadSquare
-  au Syntax * RainbowParenthesesLoadBraces
+  autocmd VimEnter * RainbowParenthesesToggle
+  autocmd Syntax * RainbowParenthesesLoadRound
+  autocmd Syntax * RainbowParenthesesLoadSquare
+  autocmd Syntax * RainbowParenthesesLoadBraces
 endif
 " }}}
