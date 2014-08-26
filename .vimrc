@@ -264,11 +264,11 @@ autocmd BufReadPost *
   \ endif
 
 fun! StripTrailingWhitespace()
-    " don't strip on these filetypes
-    if &ft =~ 'markdown'
-        return
-    endif
-    %s/\s\+$//e
+  " don't strip on these filetypes
+  if &ft =~ 'markdown'
+    return
+  endif
+  %s/\s\+$//e
 endfun
 autocmd BufWritePre * call StripTrailingWhitespace()
 
@@ -297,10 +297,10 @@ function! s:RunShellCommand(cmdline)
   echo a:cmdline
   let expanded_cmdline = a:cmdline
   for part in split(a:cmdline, ' ')
-     if part[0] =~ '\v[%#<]'
-        let expanded_part = fnameescape(expand(part))
-        let expanded_cmdline = substitute(expanded_cmdline, part, expanded_part, '')
-     endif
+    if part[0] =~ '\v[%#<]'
+      let expanded_part = fnameescape(expand(part))
+      let expanded_cmdline = substitute(expanded_cmdline, part, expanded_part, '')
+    endif
   endfor
   botright new
   setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap
