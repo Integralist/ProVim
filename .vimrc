@@ -323,4 +323,13 @@ if exists(':RainbowParenthesesToggle')
   autocmd Syntax * RainbowParenthesesLoadSquare
   autocmd Syntax * RainbowParenthesesLoadBraces
 endif
+
+" Change colourscheme when diffing
+fun! SetDiffColours()
+  highlight DiffAdd    cterm=bold ctermfg=white ctermbg=DarkGreen
+  highlight DiffDelete cterm=bold ctermfg=white ctermbg=DarkGrey
+  highlight DiffChange cterm=bold ctermfg=white ctermbg=DarkBlue
+  highlight DiffText   cterm=bold ctermfg=white ctermbg=DarkRed
+endfun
+autocmd FilterWritePre * call SetDiffColours()
 " }}}
