@@ -330,8 +330,8 @@ endif
 " Reset spelling colours when reading a new buffer
 " This works around an issue where the colorscheme is changed by .local.vimrc
 fun! SetSpellingColours()
-  highlight SpellBad cterm=bold ctermfg=Red ctermbg=white
-  highlight SpellCap cterm=bold ctermfg=white ctermbg=red
+  highlight SpellBad cterm=bold ctermfg=white ctermbg=red
+  highlight SpellCap cterm=bold ctermfg=red ctermbg=white
 endfun
 autocmd BufWinEnter * call SetSpellingColours()
 autocmd BufNewFile * call SetSpellingColours()
