@@ -113,6 +113,9 @@ let g:netrw_liststyle=3
 " cutoff appears on longer screens
 autocmd BufWinEnter * highlight ColorColumn ctermbg=darkred
 set colorcolumn=80
+
+" Turn on spell checking
+set spell spelllang=en_gb
 " }}}
 
 " Plugins {{{
@@ -324,9 +327,17 @@ if exists(':RainbowParenthesesToggle')
   autocmd Syntax * RainbowParenthesesLoadBraces
 endif
 
-" When checking spelling
-highlight SpellBad cterm=bold ctermfg=Red ctermbg=white
-highlight SpellCap cterm=bold ctermfg=white ctermbg=red
+" Reset spelling colours when reading a new buffer
+" This works around an issue where the colorscheme is changed by .local.vimrc
+fun! SetSpellingColours()
+  highlight SpellBad cterm=bold ctermfg=Red ctermbg=white
+  highlight SpellCap cterm=bold ctermfg=white ctermbg=red
+endfun
+autocmd BufWinEnter * call SetSpellingColours()
+autocmd BufNewFile * call SetSpellingColours()
+autocmd BufRead * call SetSpellingColours()
+autocmd InsertEnter * call SetSpellingColours()
+autocmd InsertLeave * call SetSpellingColours()
 
 " Change colourscheme when diffing
 fun! SetDiffColours()
