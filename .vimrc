@@ -324,6 +324,10 @@ if exists(':RainbowParenthesesToggle')
   autocmd Syntax * RainbowParenthesesLoadBraces
 endif
 
+" When checking spelling
+highlight SpellBad cterm=bold ctermfg=Red ctermbg=white
+highlight SpellCap cterm=bold ctermfg=white ctermbg=red
+
 " Change colourscheme when diffing
 fun! SetDiffColours()
   highlight DiffAdd    cterm=bold ctermfg=white ctermbg=DarkGreen
