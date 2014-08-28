@@ -113,9 +113,6 @@ let g:netrw_liststyle=3
 " cutoff appears on longer screens
 autocmd BufWinEnter * highlight ColorColumn ctermbg=darkred
 set colorcolumn=80
-
-" Turn on spell checking
-set spell spelllang=en_gb
 " }}}
 
 " Plugins {{{
