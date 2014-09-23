@@ -11,6 +11,12 @@ export LSCOLORS=Gxfxcxdxbxegedabagacad
 export LS_COLORS=Gxfxcxdxbxegedabagacad
 # }}}
 
+# Ruby {{{
+function get_ruby_version() {
+  ruby -v | awk '{print $1 " " $2}'
+}
+# }}}
+
 # Tmux {{{
 # Makes creating a new tmux session (with a specific name) easier
 function tmuxopen() {
