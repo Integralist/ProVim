@@ -337,11 +337,11 @@ autocmd InsertEnter * call SetSpellingColours()
 autocmd InsertLeave * call SetSpellingColours()
 
 " Change colourscheme when diffing
-fun! SetDiffColours()
+fun! SetDiffColors()
   highlight DiffAdd    cterm=bold ctermfg=white ctermbg=DarkGreen
   highlight DiffDelete cterm=bold ctermfg=white ctermbg=DarkGrey
   highlight DiffChange cterm=bold ctermfg=white ctermbg=DarkBlue
   highlight DiffText   cterm=bold ctermfg=white ctermbg=DarkRed
 endfun
-autocmd FilterWritePre * call SetDiffColours()
+autocmd FilterWritePre * call SetDiffColors()
 " }}}
