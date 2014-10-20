@@ -218,9 +218,8 @@ map <leader>yd :bufdo bd<cr>
 " Make handling vertical/linear Vim windows easier
 map <leader>w- <C-W>- " decrement height
 map <leader>w+ <C-W>+ " increment height
-map <leader>w] <C-W>_ " maximise height
-" map <leader>w\ <C-W>| " maximise width DOESN'T WORK?
-map <leader>w[ <C-W>= " equalise all windows
+map <leader>w] <C-W>_ " maximize height
+map <leader>w[ <C-W>= " equalize all windows
 
 " Handling horizontal Vim windows doesn't appear to be possible.
 " Attempting to map <C-W> < and > didn't work
