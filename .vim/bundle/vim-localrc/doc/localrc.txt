@@ -1,0 +1,141 @@
+*localrc.txt*	Enable configuration file of each directory.
+
+Version: 0.2.0
+Author : thinca <thinca+vim@gmail.com>
+License: zlib License
+
+==============================================================================
+CONTENTS					*localrc-contents*
+
+INTRODUCTION			|localrc-introduction|
+USAGE				|localrc-usage|
+INTERFACE			|localrc-interface|
+  FUNCTIONS			  |localrc-functions|
+CUSTOMIZING			|localrc-customizing|
+EXAMPLES			|localrc-examples|
+CHANGELOG			|localrc-changelog|
+
+
+==============================================================================
+INTRODUCTION					*localrc-introduction*
+
+*localrc* is a Vim plugin to enable configuration file of each directory.
+
+
+Requirements:
+- Vim 7.2 or later
+
+Latest version:
+https://github.com/thinca/vim-localrc
+
+
+
+==============================================================================
+USAGE						*localrc-usage*
+
+You can put a configuration file for the files below the certain directory.
+
+The configuration file is a Vim script of a decided file name like ".vimrc".
+The file name is specified by |g:localrc_filename|.
+
+The configuration file is loaded at the timing of |BufReadPost| and
+|BufNewFile|.  And, it is loaded also at the timing of |VimEnter| if you start
+Vim with no file.
+
+Configuration file applied only to a specific filetype can be put.  The file
+name is specified by |g:localrc_filetype|.
+
+When two or more configuration files exist, it is sequentially loaded from a
+shallow hierarchy.
+For example: >
+	~/
+	|- .local.vimrc		(1)
+	`- project/
+	   |- .local.vimrc	(2)
+	   `- src/
+	      |- .local.vimrc	(3)
+	      `- main.c
+In this case, when main.c is loaded, the configuration files are loaded in
+order of the number.
+
+
+
+==============================================================================
+INTERFACE					*localrc-interface*
+
+------------------------------------------------------------------------------
+FUNCTIONS					*localrc-functions*
+
+localrc#load({fnames} [, {path} [, {depth}]])	*localrc#load()*
+	Load settings with |:source|.
+
+	{fnames} is file names to load.  This is a |List| or a string.
+	|wildcards| can be used for this.  Additionally, this is treated as a
+	regular expression if it starts with "/".
+	{path} is a directory for search base directory.  The directory must
+	exist.  If omitted, a directory with a file of current buffer is used.
+	{depth} is a number of hierarchies of the traced directory.  -1 is
+	all.  If omitted, -1 is used.
+
+localrc#search({fnames} [, {path} [, {depth}]])	*localrc#search()*
+	Search the files to load and return it as |List|.
+	The arguments are same to |localrc#load()|.
+
+
+
+==============================================================================
+CUSTOMIZING					*localrc-customizing*
+
+g:localrc_filename				*g:localrc_filename*
+	The configuration file name.  This is passed to {fnames} argument of
+	|localrc#load()|.
+
+	default: ".local.vimrc"
+
+g:localrc_filetype				*g:localrc_filetype*
+	The name of configuration file for specific filetype.
+	"%s" is replaced by filetype.
+
+	default: '/^\.local\..*\<%s\>.*\.vimrc$'
+
+
+
+==============================================================================
+EXAMPLES					*localrc-examples*
+
+Examples of configuration file.
+>
+	" cd to the directory with the configuration file.
+	lcd <sfile>:h
+
+	" Setting of indent to project.
+	setlocal tabstop=4 noexpandtab
+<
+You can load configuration files by favorite timing.
+For example, in vimrc...
+>
+	" Read the configuration file for the directory that starts Vim.
+	call localrc#load('.init.vimrc', getcwd())
+<
+
+
+
+==============================================================================
+CHANGELOG					*localrc-changelog*
+
+0.2.0	2013-02-28
+	- Use |autocmd-nested| for autocmds.
+	- Add |VimEnter| autocmd.
+
+0.1.2	2011-01-25
+	- Improved the default value of |g:localrc_filetype|.
+
+0.1.1	2011-01-17
+	- Use "%" instead of "<afile>".
+
+0.1.0	2011-01-08
+	- Initial version.
+
+
+==============================================================================
+vim:tw=78:fo=tcq2mM:ts=8:ft=help:norl
