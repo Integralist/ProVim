@@ -59,6 +59,7 @@ set shiftwidth=4
 set number
 
 " Highlight tailing whitespace
+" See issue: https://github.com/Integralist/ProVim/issues/4
 set list listchars=tab:\ \ ,trail:·
 
 " Get rid of the delay when pressing O (for example)
